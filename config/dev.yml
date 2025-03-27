@@ -1,0 +1,8 @@
+app:
+  app_name: reception
+  log_level: debug
+
+auth:
+  access_ttl: 15m
+  refresh_ttl: 1h
+  code_length: 6
