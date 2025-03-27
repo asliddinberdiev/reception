@@ -6,9 +6,10 @@ APP_CMD_DIR := ${CURRENT_DIR}/cmd/app
 TAG := latest
 ENV_TAG := latest
 
--include ./conf/dev.env
+-include ./config/dev.env
+export APP_ENVIRONMENT=dev
 
-POSTGRESQL_URL := 'postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=${POSTGRES_SSLMODE}'
+POSTGRESQL_URL = 'postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=${POSTGRES_SSLMODE}'
 
 build:
 	@rm -f ${CURRENT_DIR}/bin/${APP}
@@ -34,7 +35,6 @@ push-image:
 swag-init:
 	@swag init -g internal/transport/http/handler.go -o docs --parseVendor --parseDependency 1 --parseInternal 1 --parseDepth 1
 
-# export APP_ENVIRONMENT=prod
 run: 
 	@go run ${APP_CMD_DIR}/main.go
 
