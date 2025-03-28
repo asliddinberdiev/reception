@@ -6,16 +6,18 @@ import (
 	"github.com/asliddinberdiev/reception/internal/models"
 	"github.com/asliddinberdiev/reception/pkg/helper"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 func (h *Handler) initAppointmentRoutes(router fiber.Router) {
 	appointment := router.Group("appointments", h.middlewareUser)
 	{
-		appointment.Post("", h.createAppointment)
+		appointment.Post("", h.appointmentCreate)
+		appointment.Put("/:id", h.appointmentUpdateStatus)
 	}
 }
 
-func (h *Handler) createAppointment(c *fiber.Ctx) error {
+func (h *Handler) appointmentCreate(c *fiber.Ctx) error {
 	userID, err := h.MwGetUserID(c)
 	if err != nil {
 		return fiber.NewError(fiber.StatusUnauthorized, "not found user")
@@ -69,4 +71,21 @@ func (h *Handler) createAppointment(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(res)
+}
+
+func (h *Handler) appointmentUpdateStatus(c *fiber.Ctx) error {
+	id := c.Params("id", "")
+	if _, err := uuid.Parse(id); err != nil {
+		return fiber.NewError(fiber.StatusNotFound, "not found")
+	}
+
+	if err := h.sve.Appointment.UpdateStatus(
+		c.Context(),
+		models.CommonGetByID{ID: id},
+	); err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).SendString("successfully update")
+
 }

@@ -97,7 +97,7 @@ func (r *appointmentRepo) GetByID(ctx context.Context, req models.CommonGetByID)
 }
 
 func (r *appointmentRepo) GetByRangeTime(ctx context.Context, req models.AppointmentRangeTime) (bool, error) {
-    query := `
+	query := `
         SELECT EXISTS (
             SELECT 1 
             FROM appointments 
@@ -108,21 +108,33 @@ func (r *appointmentRepo) GetByRangeTime(ctx context.Context, req models.Appoint
         )
     `
 
-    var exists bool
-    err := r.db.QueryRow(
-        ctx, 
-        query,
-        req.DoctorID,
-        req.Date,
-        req.StartTime,
-        req.EndTime,
-    ).Scan(&exists)
+	var exists bool
+	err := r.db.QueryRow(
+		ctx,
+		query,
+		req.DoctorID,
+		req.Date,
+		req.StartTime,
+		req.EndTime,
+	).Scan(&exists)
 
-    if err != nil {
-        return false, err
-    }
+	if err != nil {
+		return false, err
+	}
 
-    return !exists, nil
+	return !exists, nil
 }
 
+func (r *appointmentRepo) UpdateStatus(ctx context.Context, req models.CommonGetByID) error {
+	query := `
+		UPDATE "appointments"
+		SET status = 'cancelled'
+		WHERE id = $1 
+	`
 
+	if _, err := r.db.Exec(ctx, query, req.ID); err != nil {
+		return errors.Wrap(err, "failed to status update")
+	}
+
+	return nil
+}

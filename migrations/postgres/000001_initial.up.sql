@@ -93,8 +93,7 @@ CREATE TABLE IF NOT EXISTS "appointments" (
     "status" appointment_status DEFAULT 'pending',
     "doctor_approval" BOOLEAN DEFAULT FALSE,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "unique_appointment" UNIQUE ("doctor_id", "appointment_date", "appointment_time")
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TYPE "notification_status" AS ENUM (

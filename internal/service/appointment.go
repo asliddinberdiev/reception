@@ -28,3 +28,7 @@ func (s *appointmentService) GetByID(ctx context.Context, req models.CommonGetBy
 func (s *appointmentService) GetByRangeTime(ctx context.Context, req models.AppointmentRangeTime) (bool, error) {
 	return s.strg.Appointment().GetByRangeTime(ctx, req)
 }
+
+func (s *appointmentService) UpdateStatus(ctx context.Context, req models.CommonGetByID) error {
+	return s.strg.Appointment().UpdateStatus(ctx, req)
+}
