@@ -7,7 +7,7 @@ type Token struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-type PatientClaims struct {
+type UserClaims struct {
 	ID string `json:"id"`
 	jwt.StandardClaims
 }
@@ -22,10 +22,10 @@ type VerifyInput struct {
 }
 
 type RegisterInput struct {
-	PhoneNumber string `json:"phone_number" validate:"required,numeric,len=12"`
+	PhoneNumber string `json:"phone_number" validate:"required,numeric,len=12,startswith=998"`
 }
 
 type LoginInput struct {
-	PhoneNumber string `json:"phone_number" validate:"required,numeric,len=12"`
+	PhoneNumber string `json:"phone_number" validate:"required,numeric,len=12,startswith=998"`
 	Password    string `json:"password" validate:"required,min=6"`
 }

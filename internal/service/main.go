@@ -14,19 +14,24 @@ type User interface {
 
 type Patient interface {
 	Create(ctx context.Context, inp models.PatientCreateInput) (*models.CommonGetByIDResponse, error)
-	HasPatientByPhone(ctx context.Context, phoneNumber string) (bool, error)
 	GetPatientByPhone(ctx context.Context, phoneNumber string) (*models.Patient, error)
 	SetAsVerified(ctx context.Context, phoneNumber string) (*models.Patient, error)
+}
+
+type Appointment interface {
+	Create(ctx context.Context, req models.AppointmentCreateInput) (*models.CommonGetByIDResponse, error)
 }
 
 type Service struct {
 	User
 	Patient
+	Appointment
 }
 
 func NewService(strg storage.StoragePG, cfg *config.Config) *Service {
 	return &Service{
-		User:    NewUserService(strg, cfg),
-		Patient: NewPatientService(strg, cfg),
+		User:        NewUserService(strg, cfg),
+		Patient:     NewPatientService(strg, cfg),
+		Appointment: NewAppointmentService(strg, cfg),
 	}
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/asliddinberdiev/reception/pkg/logger"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	flogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/swagger"
 	"github.com/jackc/pgx/v5"
@@ -47,7 +48,11 @@ func (h *Handler) Init(cfg *config.Config) *fiber.App {
 	})
 
 	app.Use(flogger.New())
-	app.Use(h.cors())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
+		AllowHeaders: "Authorization, Origin, Content-Type, Accept, Content-Language, Accept-Language, Access-Control-Allow-Headers",
+	}))
 
 	app.Get("/health", h.health)
 

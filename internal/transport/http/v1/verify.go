@@ -16,9 +16,9 @@ func (h *Handler) verifyOtp(c *fiber.Ctx) error {
 		req    models.VerifyInput
 	)
 
-	token := c.Get("Token", "")
-	if token == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "token not found")
+	token, err := h.MwGetToken(c)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
 	if err := c.BodyParser(&req); err != nil {
@@ -41,7 +41,7 @@ func (h *Handler) verifyOtp(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	accessClaims := models.PatientClaims{
+	accessClaims := models.UserClaims{
 		ID:             patient.ID,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Duration(h.cfg.Auth.AccessTTL)).Unix()},
 	}
@@ -50,7 +50,7 @@ func (h *Handler) verifyOtp(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	refreshClaims := models.PatientClaims{
+	refreshClaims := models.UserClaims{
 		ID:             patient.ID,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Duration(h.cfg.Auth.RefreshTTL)).Unix()},
 	}

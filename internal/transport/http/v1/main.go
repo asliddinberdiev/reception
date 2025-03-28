@@ -11,18 +11,18 @@ import (
 )
 
 type Handler struct {
-	log     logger.Logger
-	cfg     *config.Config
-	valid   *validator.Validate
-	sve *service.Service
+	log   logger.Logger
+	cfg   *config.Config
+	valid *validator.Validate
+	sve   *service.Service
 }
 
 func NewHandler(log logger.Logger, cfg *config.Config, services *service.Service) *Handler {
 	return &Handler{
-		log:     log,
-		cfg:     cfg,
-		valid:   validator.New(),
-		sve: services,
+		log:   log,
+		cfg:   cfg,
+		valid: validator.New(),
+		sve:   services,
 	}
 }
 
@@ -34,7 +34,7 @@ func (h *Handler) Init(router fiber.Router) {
 	}
 }
 
-func MakeRequestSearch(c *fiber.Ctx) *models.CommonGetALL {
+func (h *Handler) MakeRequestSearch(c *fiber.Ctx) *models.CommonGetALL {
 	var query models.CommonGetALL
 
 	query.Limit = uint32(helper.ParseInt(c.Query("limit"), 10))

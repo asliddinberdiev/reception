@@ -6,6 +6,8 @@ import (
 	"github.com/asliddinberdiev/reception/internal/config"
 	"github.com/asliddinberdiev/reception/internal/models"
 	"github.com/asliddinberdiev/reception/internal/storage"
+	"github.com/asliddinberdiev/reception/pkg/helper"
+	"github.com/jackc/pgx/v5"
 )
 
 type patientService struct {
@@ -21,16 +23,16 @@ func (s *patientService) Create(ctx context.Context, inp models.PatientCreateInp
 	return s.strg.Patient().Create(ctx, inp)
 }
 
-func (s *patientService) HasPatientByPhone(ctx context.Context, phoneNumber string) (bool, error) {
-	if _, err := s.strg.Patient().GetByPhone(ctx, phoneNumber); err != nil {
-		return false, err
-	}
-
-	return true, nil
-}
-
 func (s *patientService) GetPatientByPhone(ctx context.Context, phoneNumber string) (*models.Patient, error) {
-	return s.strg.Patient().GetByPhone(ctx, phoneNumber)
+	res, err := s.strg.Patient().GetByPhone(ctx, phoneNumber)
+	if err != nil {
+		if helper.ErrorIs(err, pgx.ErrNoRows.Error()) {
+			return &models.Patient{}, nil
+		}
+
+		return nil, err
+	}
+	return res, nil
 }
 
 func (s *patientService) SetAsVerified(ctx context.Context, phoneNumber string) (*models.Patient, error) {

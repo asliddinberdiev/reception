@@ -11,7 +11,7 @@ func (h *Handler) initUserRoutes(router fiber.Router) {
 }
 
 func (h *Handler) getAllDoctors(c *fiber.Ctx) error {
-	params := MakeRequestSearch(c)
+	params := h.MakeRequestSearch(c)
 
 	res, err := h.sve.User.GetAllDoctors(
 		c.Context(),

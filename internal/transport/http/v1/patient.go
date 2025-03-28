@@ -18,7 +18,7 @@ func (h *Handler) initPatientRoutes(router fiber.Router) {
 	{
 		patient.Post("register", h.registerPatient)
 		patient.Post("login", h.loginPatient)
-		patient.Post("verify", h.verifyOtp)
+		patient.Post("verify", h.otpMiddleware, h.verifyOtp)
 	}
 }
 
@@ -33,12 +33,16 @@ func (h *Handler) registerPatient(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	hasPatient, err := h.sve.Patient.HasPatientByPhone(c.Context(), req.PhoneNumber)
+	patient, err := h.sve.Patient.GetPatientByPhone(c.Context(), req.PhoneNumber)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	if !hasPatient {
+	if patient.IsVerified {
+		return fiber.NewError(fiber.StatusOK, "already exists")
+	}
+
+	if len(patient.ID) == 0 && !patient.IsVerified {
 		hashedPassword, err := helper.PasswordHash(req.Password)
 		if err != nil {
 			return fiber.NewError(fiber.StatusInternalServerError, err.Error())
@@ -58,6 +62,7 @@ func (h *Handler) registerPatient(c *fiber.Ctx) error {
 
 	msg := fmt.Sprintf("Your secret key: %s", otp)
 	h.log.Info("OTP message", logger.Any("msg", msg))
+
 	if h.cfg.App.Environment != "dev" {
 		// send sms func
 	}
@@ -66,6 +71,7 @@ func (h *Handler) registerPatient(c *fiber.Ctx) error {
 		PhoneNumber:    req.PhoneNumber,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Duration(h.cfg.Auth.OtpTTL)).Unix()},
 	}
+
 	token, err := auth.GenerateToken(claims, otp)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
@@ -99,7 +105,7 @@ func (h *Handler) loginPatient(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusUnauthorized, "invalid credentials")
 	}
 
-	accessClaims := models.PatientClaims{
+	accessClaims := models.UserClaims{
 		ID:             patient.ID,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Duration(h.cfg.Auth.AccessTTL)).Unix()},
 	}
@@ -108,7 +114,7 @@ func (h *Handler) loginPatient(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	refreshClaims := models.PatientClaims{
+	refreshClaims := models.UserClaims{
 		ID:             patient.ID,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Duration(h.cfg.Auth.RefreshTTL)).Unix()},
 	}
