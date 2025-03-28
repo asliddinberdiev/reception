@@ -19,3 +19,9 @@ type GetAllProfileShort struct {
 	Data  []ProfileShort `json:"data"`
 	Total uint32         `json:"total"`
 }
+
+type DoctorShort struct {
+	ID        string `json:"id"`
+	Firstname string `json:"first_name"`
+	Lastname  string `json:"last_name"`
+}

@@ -18,7 +18,7 @@ func (h *Handler) initPatientRoutes(router fiber.Router) {
 	{
 		patient.Post("register", h.registerPatient)
 		patient.Post("login", h.loginPatient)
-		patient.Post("verify", h.otpMiddleware, h.verifyOtp)
+		patient.Post("verify", h.middlewareOTP, h.verifyOtp)
 	}
 }
 

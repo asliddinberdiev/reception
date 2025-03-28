@@ -6,10 +6,6 @@ type CommonGetALL struct {
 	Search string `json:"search"`
 }
 
-type CommonGetByIDRequest struct {
-	ID string `json:"id"`
-}
-
-type CommonGetByIDResponse struct {
+type CommonGetByID struct {
 	ID string `json:"id"`
 }

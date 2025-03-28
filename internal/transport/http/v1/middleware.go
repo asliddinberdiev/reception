@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (h *Handler) middlewareJWT(c *fiber.Ctx) error {
+func (h *Handler) middlewareUser(c *fiber.Ctx) error {
 	token := c.Get("Authorization")
 
 	tks := strings.Split(token, " ")
@@ -30,7 +30,7 @@ func (h *Handler) middlewareJWT(c *fiber.Ctx) error {
 	return c.Next()
 }
 
-func (h *Handler) otpMiddleware(c *fiber.Ctx) error {
+func (h *Handler) middlewareOTP(c *fiber.Ctx) error {
 
 	token := c.Get("Authorization")
 

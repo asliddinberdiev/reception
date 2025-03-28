@@ -85,10 +85,11 @@ CREATE TYPE "appointment_status" AS ENUM (
 
 CREATE TABLE IF NOT EXISTS "appointments" (
     "id" UUID NOT NULL PRIMARY KEY,
-    "patient_id" UUID REFERENCES "patients" ("id") ON DELETE SET NULL,
-    "doctor_id" UUID REFERENCES "users" ("id") ON DELETE SET NULL,
+    "patient_id" UUID REFERENCES "patients" ("id") ON DELETE CASCADE,
+    "doctor_id" UUID REFERENCES "users" ("id") ON DELETE CASCADE,
     "appointment_date" DATE NOT NULL,
     "appointment_time" TIME NOT NULL,
+    "duration" INTERVAL NOT NULL DEFAULT INTERVAL '30 minutes',
     "status" appointment_status DEFAULT 'pending',
     "doctor_approval" BOOLEAN DEFAULT FALSE,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

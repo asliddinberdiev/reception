@@ -31,6 +31,7 @@ func (h *Handler) Init(router fiber.Router) {
 	{
 		h.initUserRoutes(v1)
 		h.initPatientRoutes(v1)
+		h.initAppointmentRoutes(v1)
 	}
 }
 

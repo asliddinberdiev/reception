@@ -20,7 +20,7 @@ func NewPatientRepo(db models.DB, log logger.Logger) repository.PatientPgI {
 	return &patientRepo{db: db, log: log}
 }
 
-func (r *patientRepo) Create(ctx context.Context, inp models.PatientCreateInput) (*models.CommonGetByIDResponse, error) {
+func (r *patientRepo) Create(ctx context.Context, inp models.PatientCreateInput) (*models.CommonGetByID, error) {
 	id := helper.NewV7ID()
 	query := `
 		INSERT INTO patients (
@@ -37,7 +37,7 @@ func (r *patientRepo) Create(ctx context.Context, inp models.PatientCreateInput)
 		return nil, errors.Wrap(err, "failed to create patient")
 	}
 
-	return &models.CommonGetByIDResponse{ID: id}, nil
+	return &models.CommonGetByID{ID: id}, nil
 }
 
 func (r *patientRepo) GetByPhone(ctx context.Context, phoneNumber string) (*models.Patient, error) {

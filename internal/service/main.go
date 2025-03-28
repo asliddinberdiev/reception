@@ -13,13 +13,15 @@ type User interface {
 }
 
 type Patient interface {
-	Create(ctx context.Context, inp models.PatientCreateInput) (*models.CommonGetByIDResponse, error)
+	Create(ctx context.Context, inp models.PatientCreateInput) (*models.CommonGetByID, error)
 	GetPatientByPhone(ctx context.Context, phoneNumber string) (*models.Patient, error)
 	SetAsVerified(ctx context.Context, phoneNumber string) (*models.Patient, error)
 }
 
 type Appointment interface {
-	Create(ctx context.Context, req models.AppointmentCreateInput) (*models.CommonGetByIDResponse, error)
+	Create(ctx context.Context, req models.AppointmentCreateInput) (*models.CommonGetByID, error)
+	GetByID(ctx context.Context, req models.CommonGetByID) (*models.Appointment, error)
+	GetByRangeTime(ctx context.Context, req models.AppointmentRangeTime) (bool, error)
 }
 
 type Service struct {

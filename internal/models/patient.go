@@ -14,6 +14,12 @@ type Patient struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+type PatientShort struct {
+	ID        string `json:"id"`
+	Firstname string `json:"first_name"`
+	Lastname  string `json:"last_name"`
+}
+
 type PatientCreateInput struct {
 	PhoneNumber string `json:"phone_number" validate:"required,numeric,len=12"`
 	Firstname   string `json:"first_name" validate:"required,min=2,lowercase"`

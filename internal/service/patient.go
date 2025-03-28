@@ -19,7 +19,7 @@ func NewPatientService(strg storage.StoragePG, cfg *config.Config) *patientServi
 	return &patientService{strg: strg, cfg: cfg}
 }
 
-func (s *patientService) Create(ctx context.Context, inp models.PatientCreateInput) (*models.CommonGetByIDResponse, error) {
+func (s *patientService) Create(ctx context.Context, inp models.PatientCreateInput) (*models.CommonGetByID, error) {
 	return s.strg.Patient().Create(ctx, inp)
 }
 
