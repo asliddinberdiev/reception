@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS "roles" (
     "translation" JSONB NOT NULL
 );
 INSERT INTO "roles" ("id", "name", "translation") VALUES
-    ('0195d786-257b-75bc-9901-52a3cf27e1ed', 'admin', '{"en":"Admin", "ru":"Админ", "uz":"Admin"}'),
-    ('0195d786-5a00-71f1-be49-b7cd48c150d2', 'doctor', '{"en":"Doctor", "ru":"Врач", "uz":"Shifokor"}');
+    ('0195d786-257b-75bc-9901-52a3cf27e1ed', 'admin', '{"en":"admin", "ru":"aдмин", "uz":"admin"}'),
+    ('0195d786-5a00-71f1-be49-b7cd48c150d2', 'doctor', '{"en":"doctor", "ru":"врач", "uz":"shifokor"}');
 
 CREATE TABLE IF NOT EXISTS "users" (
     "id" UUID NOT NULL PRIMARY KEY,
@@ -34,8 +34,8 @@ CREATE INDEX "user_phone_deleted_idx" ON "users" ("phone_number", "deleted_at");
 CREATE INDEX "user_id_deleted_idx" ON "users" ("id", "deleted_at");
 
 INSERT INTO "users" ("id", "phone_number", "is_validated", "first_name", "last_name", "password") VALUES
-    ('0195d790-c1fb-768f-a452-6278a74e35bd', '998331202124', TRUE, 'Asliddin', 'Berdiev', '$2y$10$sGtkwdbKL.0Ggb67m6OVBOlX77Mxb.qsyYWJH3Dd4LrFWqc1LZ/fa'), -- password: 123123
-    ('0195d791-1546-7cee-8d89-60c1072d44a3', '998901112233', TRUE, 'Alisher', 'Berdiev', '$2y$10$eKFsgOgMpiJn0EHFgAj4IeQdtuPIQP33W8OetvGzua7lFtyq9umMW'); -- password: 123321
+    ('0195d790-c1fb-768f-a452-6278a74e35bd', '998331202124', TRUE, 'asliddin', 'berdiev', '$2y$10$sGtkwdbKL.0Ggb67m6OVBOlX77Mxb.qsyYWJH3Dd4LrFWqc1LZ/fa'), -- password: 123123
+    ('0195d791-1546-7cee-8d89-60c1072d44a3', '998901112233', TRUE, 'alisher', 'berdiev', '$2y$10$eKFsgOgMpiJn0EHFgAj4IeQdtuPIQP33W8OetvGzua7lFtyq9umMW'); -- password: 123321
 
 
 CREATE TABLE IF NOT EXISTS "user_roles" (
@@ -50,7 +50,7 @@ INSERT INTO "user_roles" ("user_id", "role_id") VALUES
 
 CREATE TABLE IF NOT EXISTS "user_work_times" (
     "user_id" UUID NOT NULL REFERENCES "users"("id") ON DELETE CASCADE,
-    "week_day" INT CHECK ("week_day" BETWEEN 0 AND 6),
+    "week_day" INT CHECK ("week_day" BETWEEN 1 AND 7),
     "start_time" TIME NOT NULL DEFAULT '09:00:00',
     "finish_time" TIME NOT NULL DEFAULT '17:00:00',
     CHECK ("start_time" < "finish_time"),
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS "user_work_times" (
 );
 
 INSERT INTO "user_work_times" ("user_id", "week_day") VALUES
-    ('0195d790-c1fb-768f-a452-6278a74e35bd', 0),
-    ('0195d791-1546-7cee-8d89-60c1072d44a3', 1);
+    ('0195d790-c1fb-768f-a452-6278a74e35bd', 1),
+    ('0195d791-1546-7cee-8d89-60c1072d44a3', 2);
 
 CREATE TABLE IF NOT EXISTS "patients" (
     "id" UUID NOT NULL PRIMARY KEY,
