@@ -5,4 +5,5 @@ app:
 auth:
   access_ttl: 15m
   refresh_ttl: 1h
+  otp_ttl: 2m
   code_length: 6

@@ -11,11 +11,15 @@ import (
 )
 
 type repos struct {
-	userRepo repository.UserPgI
+	userRepo        repository.UserPgI
+	patientRepo     repository.PatientPgI
+	appointmentRepo repository.AppointmentPgI
 }
 
 type repoIs interface {
 	User() repository.UserPgI
+	Patient() repository.PatientPgI
+	Appointment() repository.AppointmentPgI
 }
 
 type storage struct {
@@ -47,7 +51,9 @@ func NewStoragePg(db *pgxpool.Pool, log logger.Logger) StoragePG {
 		db:  db,
 		log: log,
 		repos: repos{
-			userRepo: postgres.NewUserRepo(db, log),
+			userRepo:        postgres.NewUserRepo(db, log),
+			patientRepo:     postgres.NewPatientRepo(db, log),
+			appointmentRepo: postgres.NewAppointmentRepo(db, log),
 		},
 	}
 }
@@ -70,7 +76,9 @@ func (s *storage) WithTransaction(ctx context.Context) (StorageTrI, error) {
 		tx:   tx,
 		conn: conn,
 		repos: repos{
-			userRepo: postgres.NewUserRepo(tx, s.log),
+			userRepo:        postgres.NewUserRepo(tx, s.log),
+			patientRepo:     postgres.NewPatientRepo(tx, s.log),
+			appointmentRepo: postgres.NewAppointmentRepo(tx, s.log),
 		},
 	}, nil
 }
@@ -97,4 +105,12 @@ func (s *storageTr) Rollback(ctx context.Context) error {
 
 func (s *repos) User() repository.UserPgI {
 	return s.userRepo
+}
+
+func (s *repos) Patient() repository.PatientPgI {
+	return s.patientRepo
+}
+
+func (s *repos) Appointment() repository.AppointmentPgI {
+	return s.appointmentRepo
 }

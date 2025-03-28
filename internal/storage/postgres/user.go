@@ -19,7 +19,7 @@ func NewUserRepo(db models.DB, log logger.Logger) repository.UserPgI {
 	return &userRepo{db: db, log: log}
 }
 
-func (r *userRepo) GetAllDoctors(ctx context.Context, req models.GetALLRequest) (*models.GetAllProfileShort, error) {
+func (r *userRepo) GetAllDoctors(ctx context.Context, req models.CommonGetALL) (*models.GetAllProfileShort, error) {
 	list := &models.GetAllProfileShort{
 		Data: make([]models.ProfileShort, 0),
 	}

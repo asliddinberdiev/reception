@@ -14,7 +14,7 @@ type Handler struct {
 	log     logger.Logger
 	cfg     *config.Config
 	valid   *validator.Validate
-	s *service.Service
+	sve *service.Service
 }
 
 func NewHandler(log logger.Logger, cfg *config.Config, services *service.Service) *Handler {
@@ -22,7 +22,7 @@ func NewHandler(log logger.Logger, cfg *config.Config, services *service.Service
 		log:     log,
 		cfg:     cfg,
 		valid:   validator.New(),
-		s: services,
+		sve: services,
 	}
 }
 
@@ -30,11 +30,12 @@ func (h *Handler) Init(router fiber.Router) {
 	v1 := router.Group("/v1")
 	{
 		h.initUserRoutes(v1)
+		h.initPatientRoutes(v1)
 	}
 }
 
-func MakeRequestSearch(c *fiber.Ctx) *models.GetALLRequest {
-	var query models.GetALLRequest
+func MakeRequestSearch(c *fiber.Ctx) *models.CommonGetALL {
+	var query models.CommonGetALL
 
 	query.Limit = uint32(helper.ParseInt(c.Query("limit"), 10))
 	query.Page = uint32(helper.ParseInt(c.Query("page"), 1))

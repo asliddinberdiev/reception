@@ -13,9 +13,9 @@ func (h *Handler) initUserRoutes(router fiber.Router) {
 func (h *Handler) getAllDoctors(c *fiber.Ctx) error {
 	params := MakeRequestSearch(c)
 
-	res, err := h.s.User.GetAllDoctors(
+	res, err := h.sve.User.GetAllDoctors(
 		c.Context(),
-		models.GetALLRequest{
+		models.CommonGetALL{
 			Limit:  params.Limit,
 			Page:   params.Page,
 			Search: params.Search,

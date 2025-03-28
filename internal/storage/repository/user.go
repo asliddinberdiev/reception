@@ -7,5 +7,5 @@ import (
 )
 
 type UserPgI interface {
-	GetAllDoctors(ctx context.Context, req models.GetALLRequest) (*models.GetAllProfileShort, error)
+	GetAllDoctors(ctx context.Context, req models.CommonGetALL) (*models.GetAllProfileShort, error)
 }

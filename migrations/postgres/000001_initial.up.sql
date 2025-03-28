@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS "patients" (
     "updated_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" BIGINT NOT NULL DEFAULT 0
 );
+CREATE INDEX "patient_phone_deleted_idx" ON "patients" ("phone_number", "deleted_at");
+CREATE INDEX "patient_id_deleted_idx" ON "patients" ("id", "deleted_at");
 
 CREATE TYPE "appointment_status" AS ENUM (
     'pending',

@@ -29,6 +29,7 @@ type App struct {
 type Auth struct {
 	AccessTTL  time.Duration `envconfig:"AUTH_ACCESS_TTL" default:"15m" required:"true" mapstructure:"access_ttl"`
 	RefreshTTL time.Duration `envconfig:"AUTH_REFRESH_TTL" default:"1h" required:"true" mapstructure:"refresh_ttl"`
+	OtpTTL     time.Duration `envconfig:"AUTH_OTP_TTL" default:"2m" required:"true" mapstructure:"otp_ttl"`
 	CodeLength int           `envconfig:"AUTH_CODE_LENGTH" default:"8" required:"true" mapstructure:"code_length"`
 	SecretKey  string        `envconfig:"AUTH_KEY" default:"auth_secret_key" required:"true" mapstructure:"secret_key"`
 }

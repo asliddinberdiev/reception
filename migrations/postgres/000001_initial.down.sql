@@ -12,6 +12,9 @@ DROP TABLE IF EXISTS "user_work_times";
 
 DROP TABLE IF EXISTS "user_roles";
 
+DROP INDEX IF EXISTS "patient_phone_deleted_idx";
+DROP INDEX IF EXISTS "patient_id_deleted_idx";
+
 DROP INDEX IF EXISTS "user_specialty_idx";
 DROP INDEX IF EXISTS "user_phone_deleted_idx";
 DROP INDEX IF EXISTS "user_id_deleted_idx";

@@ -3,11 +3,11 @@ package http
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"github.com/asliddinberdiev/reception/internal/config"
 	"github.com/asliddinberdiev/reception/internal/service"
 	v1 "github.com/asliddinberdiev/reception/internal/transport/http/v1"
+	"github.com/asliddinberdiev/reception/pkg/helper"
 	"github.com/asliddinberdiev/reception/pkg/logger"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -85,7 +85,7 @@ func (h *Handler) errorHandler(ctx *fiber.Ctx, err error) error {
 		return ctx.Status(code).JSON(fiber.Map{"error": message})
 	}
 
-	if strings.Contains(err.Error(), pgx.ErrNoRows.Error()) {
+	if helper.ErrorIs(err, pgx.ErrNoRows.Error()) {
 		code = fiber.StatusNotFound
 		message = "not found"
 	}

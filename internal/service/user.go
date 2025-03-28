@@ -17,6 +17,6 @@ func NewUserService(strg storage.StoragePG, cfg *config.Config) *userService {
 	return &userService{strg: strg, cfg: cfg}
 }
 
-func (s *userService) GetAllDoctors(ctx context.Context, req models.GetALLRequest) (*models.GetAllProfileShort, error) {
+func (s *userService) GetAllDoctors(ctx context.Context, req models.CommonGetALL) (*models.GetAllProfileShort, error) {
 	return s.strg.User().GetAllDoctors(ctx, req)
 }
